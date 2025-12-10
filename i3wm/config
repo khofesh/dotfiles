@@ -215,7 +215,8 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # wallpaper
-exec --no-startup-id feh --bg-scale ~/Pictures/backgrounds/gnome/keys-l.jpg
+#exec --no-startup-id feh --bg-scale ~/Pictures/backgrounds/keys-l.jpg
+exec --no-startup-id feh --bg-fill ~/Pictures/backgrounds/keys-l.jpg
 
 # volumeicon
 exec --no-startup-id volumeicon
