@@ -235,4 +235,5 @@ bindsym $mod+Shift+p exec i3lock --color "#283851"
 # finds out, if available)
 bar {
         status_command i3status
+        position top
 }
