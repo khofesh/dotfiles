@@ -1,0 +1,17 @@
+[Unit]
+Description=Picoclaw gateway
+After=network.target
+
+[Service]
+Type=simple
+User=fahmi
+WorkingDirectory=/home/fahmi/.local/bin/picoclaw
+ExecStart=/home/fahmi/.local/bin/picoclaw gateway
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+Environment=HOME=/home/fahmi
+
+[Install]
+WantedBy=multi-user.target
