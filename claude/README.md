@@ -22,13 +22,23 @@ Claude Code's login identity lives in two files, so the script swaps both:
 - `~/.claude.json` — only the `oauthAccount` / `userID` / `organizationUuid` keys are
   touched; the rest of that file (project history, settings) is left intact via a Python merge.
 
+### First-time setup
+
+Snapshot each account once. Start from whichever account you're already logged into:
+
+```bash
+# 1. you're logged into your personal account → save it
+claude-profile save personal
+
+# 2. log out and into the company account in Claude Code (/login), then save it
+claude-profile save company
+```
+
+Order doesn't matter — just save each profile while logged into that account.
+
 ### Usage
 
 ```bash
-# one-time setup — log in to each account with `claude`, then snapshot it:
-claude-profile save personal     # while logged into personal
-claude-profile save company      # after re-logging into company
-
 # day to day (quit Claude Code first, restart after):
 claude-profile switch company
 claude-profile switch personal
