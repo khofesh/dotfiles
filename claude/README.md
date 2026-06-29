@@ -2,9 +2,65 @@
 
 Helpers for Claude Code.
 
+Two ways to keep personal and work accounts apart:
+
+- **`scripts/claude-slash.sh`** (recommended) — two fully separate config directories.
+  Complete isolation, no swapping, both can run at once.
+- **`scripts/claude-profile.sh`** — one config dir, swaps only the login identity in/out.
+  Older approach; superseded by `claude-slash` but kept for reference.
+
+## scripts/claude-slash.sh
+
+Run Claude Code against a second, fully independent config directory for the work account.
+
+Claude Code reads **everything** — credentials, `settings.json`, MCP servers, project
+history, memory, agents — from `$CLAUDE_CONFIG_DIR` (default `~/.claude`). Pointing it at a
+second directory gives a completely isolated account:
+
+```
+~/.claude          → personal (the default, no env var needed)
+~/.claude-slash    → work     (CLAUDE_CONFIG_DIR=~/.claude-slash)
+```
+
+The two configs are independent: settings, MCP servers, agents, and history are **not**
+shared. Configure each directory on its own.
+
+### Install
+
+Symlink it into `~/.local/bin/` (assumed to be on your `PATH`) so it's callable as `claude-slash`:
+
+```bash
+ln -sf "$PWD/scripts/claude-slash.sh" ~/.local/bin/claude-slash
+```
+
+### First-time setup
+
+```bash
+claude-slash      # starts Claude Code against ~/.claude-slash
+/login            # log into the work account
+```
+
+### Usage
+
+```bash
+claude            # personal account (~/.claude)
+claude-slash      # work account     (~/.claude-slash)
+```
+
+No quit/restart to switch — just pick the command. You can run both at the same time in
+separate terminals.
+
+### Notes
+
+- Override the work dir with `CLAUDE_SLASH_DIR=/some/path claude-slash` if you don't want
+  `~/.claude-slash`.
+- `~/.claude-slash` holds live OAuth tokens — keep it out of any committed/synced dotfiles.
+
 ## scripts/claude-profile.sh
 
-Switch the Claude Code login between accounts (e.g. personal / company).
+Switch the Claude Code login between accounts (e.g. personal / company) within a **single**
+config dir. Superseded by `claude-slash` above; use that instead unless you specifically want
+both accounts to share settings/MCP/history.
 
 ### Install
 
