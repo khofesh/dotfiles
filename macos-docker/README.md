@@ -115,6 +115,23 @@ docker compose version
 docker buildx version
 ```
 
+### Alternative: symlink the plugin
+
+If `docker compose version` still fails with `docker: unknown command: docker compose`, symlink the `docker-compose` binary into the per-user plugin directory, which the Docker CLI always checks:
+
+```bash
+brew install docker-compose
+mkdir -p ~/.docker/cli-plugins/
+ln -sfn $(which docker-compose) ~/.docker/cli-plugins/docker-compose
+docker compose version
+```
+
+```
+Docker Compose version 5.7.0
+```
+
+Do the same for buildx if needed (`ln -sfn $(which docker-buildx) ~/.docker/cli-plugins/docker-buildx`).
+
 ## 6. Start on login
 
 Either start Colima manually when you need it (`colima start`), or run it as a background service that starts at login:
@@ -260,7 +277,7 @@ Check `~/.docker/config.json` for leftovers such as `"credsStore": "desktop"` or
 | --- | --- |
 | `Cannot connect to the Docker daemon at unix:///var/run/docker.sock` | Colima is not running (`colima start`), or the wrong context is active (`docker context use colima`). For non-CLI tools see [/var/run/docker.sock](#tools-that-expect-varrundockersock). |
 | `error getting credentials - err: exec: "docker-credential-desktop": executable file not found` | Leftover from Docker Desktop. Set `"credsStore": "osxkeychain"` in `~/.docker/config.json`. |
-| `docker: 'compose' is not a docker command` | Install `docker-compose` and add `cliPluginsExtraDirs` (see [step 5](#5-docker-compose-and-buildx)). |
+| `docker: 'compose' is not a docker command` or `docker: unknown command: docker compose` | Install `docker-compose` and add `cliPluginsExtraDirs`, or symlink it into `~/.docker/cli-plugins/` (see [step 5](#5-docker-compose-and-buildx)). |
 | `exec format error` when running a container | The image is amd64 only. Use `--platform linux/amd64` with Rosetta enabled (see [x86_64 images](#running-x86_64-amd64-images)). |
 | Bind-mounted directory is empty in the container | The host path is outside `~`. Add it to `mounts:` in `colima start --edit`. |
 | Out of disk space in the VM | `docker system prune -a --volumes` to clean up, or recreate with a larger `--disk`. |
